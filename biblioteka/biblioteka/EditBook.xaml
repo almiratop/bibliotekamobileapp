@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="biblioteka.EditBook"
+             Title="Информация о книге">
+    <StackLayout>
+        <Entry x:Name="nameEntry" Text="{Binding Path=Name}"  />
+        <Entry x:Name="authorEntry" Text="{Binding Path=Author}"  />
+        <Entry x:Name="textEntry" Text="{Binding Path=Text}"  />
+        <Button Text="Сохранить" Clicked="SaveBook"  Margin="10" TextColor="White" BackgroundColor="Black"/>
+        <Button Text="Удалить" Clicked="SaveBook"  Margin="10" TextColor="White" BackgroundColor="Black"/>
+    </StackLayout>
+</ContentPage>

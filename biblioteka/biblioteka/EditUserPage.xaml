@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="biblioteka.EditUserPage"          
+             Title="Список пользователей">
+    <StackLayout>
+        <Button Text="Добавить" Clicked="AddButton_Click" Margin="10" TextColor="White" BackgroundColor="Black"/>
+        <ListView x:Name="userList" ItemsSource="{Binding}" ItemSelected="OnListViewItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.View>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Name}" FontSize="Medium" Grid.Column="0" />
+                                <Label Text="{Binding Date}" FontSize="Medium" Grid.Column="1" />
+                                <Label Text="{Binding Role}" FontSize="Medium" Grid.Column="2" />
+                                <Label Text="{Binding Login}" FontSize="Medium" Grid.Column="3" />
+                                <Label Text="{Binding Password}" FontSize="Medium" Grid.Column="4" />
+                            </Grid>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>
