@@ -4,12 +4,12 @@
              x:Class="biblioteka.EditUser"          
              Title="Информация о пользователе">
     <StackLayout>
-        <Entry x:Name="nameEntry" Text="{Binding Path=Name}"  />
-        <Entry x:Name="dateEntry" Text="{Binding Path=Date}"  />
-        <Entry x:Name="roleEntry" Text="{Binding Path=Role}"  />
-        <Entry x:Name="loginEntry" Text="{Binding Path=Login}"  />
-        <Entry x:Name="passwordEntry" Text="{Binding Path=Password}"  />
+        <Entry x:Name="nameEntry" Text="{Binding Path=Name}" Placeholder="Имя" />
+        <Entry x:Name="dateEntry" Text="{Binding Path=Date}" Placeholder="Любая информация" />
+        <Entry x:Name="roleEntry" Text="{Binding Path=Role}" Placeholder="Клиент/Библиотекарь" />
+        <Entry x:Name="loginEntry" Text="{Binding Path=Login}" Placeholder="Логин" />
+        <Entry x:Name="passwordEntry" Text="{Binding Path=Password}" Placeholder="Пароль" />
         <Button Text="Сохранить" Clicked="SaveUser"  Margin="10" TextColor="White" BackgroundColor="Black"/>
-        <Button Text="Удалить" Clicked="SaveUser"  Margin="10" TextColor="White" BackgroundColor="Black"/>
+        <Button Text="Удалить" Clicked="DeleteUser"  Margin="10" TextColor="White" BackgroundColor="Black"/>
     </StackLayout>
 </ContentPage>

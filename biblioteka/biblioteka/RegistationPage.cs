@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MySqlConnector;
+using System;
+using System.Data;
 using Xamarin.Forms;
 
 namespace biblioteka
@@ -28,15 +30,7 @@ namespace biblioteka
                 Margin = new Thickness(10),
                 TextColor = Color.Black
             };
-            picker = new Picker
-            {
-                Title = "Роль",
-                Margin = new Thickness(10),
-                TextColor = Color.Black
-            };
-            picker.Items.Add("Клиент");
-            picker.Items.Add("Библиотекарь");
-            picker.Items.Add("Администратор");
+            
 
 
             loginEntry = new Entry
@@ -96,7 +90,6 @@ namespace biblioteka
 
             stackLayout.Children.Add(nameEntry);
             stackLayout.Children.Add(dateEntry);
-            stackLayout.Children.Add(picker);
             stackLayout.Children.Add(loginEntry);
             stackLayout.Children.Add(passwordEntry);
             stackLayout.Children.Add(passwordEntry2);
@@ -114,11 +107,46 @@ namespace biblioteka
 
         private async void OnButtonClicked(object sender, System.EventArgs e)
         {
-            if (nameEntry.Text != "" && dateEntry.Text != "" && loginEntry.Text != "" && passwordEntry.Text != "" && passwordEntry.Text == passwordEntry2.Text && picker.SelectedItem != null)
+            MySqlConnection conn = new MySqlConnection("server=127.0.0.1;port=3306;database=mydb;user id=root;password=1234;charset=utf8;Pooling=false;SslMode=None;");
+            string name = "";
+            try
             {
-                await Navigation.PopAsync();
+                if (conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                    if (nameEntry.Text != "" && dateEntry.Text != "" && loginEntry.Text != "" && passwordEntry.Text != "" && passwordEntry.Text == passwordEntry2.Text)
+                    {
+                        MySqlCommand cmd1 = new MySqlCommand("select Id from User where login = @login", conn);
+                        cmd1.Parameters.AddWithValue("@login", loginEntry.Text);
+                        if (cmd1.ExecuteScalar() != null) { name = cmd1.ExecuteScalar().ToString(); }
+
+                        if (name == "")
+                        {
+                            MySqlCommand cmd = new MySqlCommand("insert into user (name, date, role, login, password) values(@name, @date, @role, @login, @password);", conn);
+                            cmd.Parameters.AddWithValue("@name", nameEntry.Text);
+                            cmd.Parameters.AddWithValue("@date", dateEntry.Text);
+                            cmd.Parameters.AddWithValue("@role", "Клиент");
+                            cmd.Parameters.AddWithValue("@login", loginEntry.Text);
+                            cmd.Parameters.AddWithValue("@password", passwordEntry.Text);
+                            cmd.ExecuteNonQuery();
+                            await DisplayAlert("Успешная регистрация", " ", "OK");
+                            await Navigation.PopAsync();
+                        }
+                        else
+                        {
+                            await DisplayAlert("Пользователь с таким логином уже существует", " ", "OK");
+                        }
+                    }
+                    else { await DisplayAlert("Пустые поля", "Заполните все поля", "OK"); }
+                }
+
+
             }
-            else { textLabel.Text = "Проверьте данные"; }
+            catch (MySqlException ex)
+            {
+                await DisplayAlert("Сообщение об ошибке", ex.ToString(), "OK");
+            }
+
         }
 
     }

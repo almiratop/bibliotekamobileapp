@@ -7,11 +7,26 @@ namespace biblioteka
 {
     public class Book : INotifyPropertyChanged
     {
+        public int id;
         private string name;
         private string author;
         private string text;
-        private string saw;
-        private string save;
+        private int saw;
+        private int save;
+        private string file;
+
+        public int Id
+        {
+            get { return id; }
+            set
+            {
+                if (id != value)
+                {
+                    id = value;
+                    OnPropertyChanged("Id");
+                }
+            }
+        }
         public string Name
         {
             get { return name; }
@@ -48,7 +63,7 @@ namespace biblioteka
                 }
             }
         }
-        public string Saw
+        public int Saw
         {
             get { return saw; }
             set
@@ -60,7 +75,7 @@ namespace biblioteka
                 }
             }
         }
-        public string Save
+        public int Save
         {
             get { return save; }
             set
@@ -69,6 +84,19 @@ namespace biblioteka
                 {
                     save = value;
                     OnPropertyChanged("Save");
+                }
+            }
+        }
+
+        public string File
+        {
+            get { return file; }
+            set
+            {
+                if (file != value)
+                {
+                    file = value;
+                    OnPropertyChanged("File");
                 }
             }
         }

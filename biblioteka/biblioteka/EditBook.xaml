@@ -3,11 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="biblioteka.EditBook"
              Title="Информация о книге">
-    <StackLayout>
-        <Entry x:Name="nameEntry" Text="{Binding Path=Name}"  />
-        <Entry x:Name="authorEntry" Text="{Binding Path=Author}"  />
-        <Entry x:Name="textEntry" Text="{Binding Path=Text}"  />
-        <Button Text="Сохранить" Clicked="SaveBook"  Margin="10" TextColor="White" BackgroundColor="Black"/>
-        <Button Text="Удалить" Clicked="SaveBook"  Margin="10" TextColor="White" BackgroundColor="Black"/>
-    </StackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <StackLayout>
+            <Entry x:Name="nameEntry" Text="{Binding Path=Name}" Placeholder="Имя" HorizontalOptions="FillAndExpand" />
+            <Entry x:Name="authorEntry" Text="{Binding Path=Author}" Placeholder="Автор" HorizontalOptions="FillAndExpand" />
+        </StackLayout>
+        <Editor Grid.Row="1" x:Name="textEntry" Placeholder="Загрузите из файла" IsReadOnly="True" Text="{Binding Path=Text}" HorizontalOptions="FillAndExpand" />
+        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Entry x:Name="fileEntry"  Grid.Column="0"   Text="{Binding Path=File}" FontSize="Medium" IsReadOnly="True"/>
+            <Button Text="Загрузить книгу"  Grid.Column="1" Clicked="Open" Margin="10" TextColor="White" BackgroundColor="Black"/>
+        </Grid>
+        <StackLayout Grid.Row="3" Orientation="Horizontal">
+            <Button Text="Сохранить" Clicked="SaveBook"  Margin="10" TextColor="White" BackgroundColor="Black"/>
+            <Button Text="Удалить" Clicked="DeleteBook"  Margin="10" TextColor="White" BackgroundColor="Black"/>
+        </StackLayout>
+    </Grid>
 </ContentPage>

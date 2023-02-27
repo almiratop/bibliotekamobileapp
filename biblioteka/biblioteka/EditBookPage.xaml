@@ -2,8 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="biblioteka.EditBookPage"
-             Title="Список пользователей">
-    <StackLayout>
+             Title="Список книг" >
+    <StackLayout >
         <Button Text="Добавить" Clicked="AddButton_Click" Margin="10" TextColor="White" BackgroundColor="Black"/>
         <ListView x:Name="booksList1" ItemsSource="{Binding}" ItemSelected="OnListViewItemSelected">
             <ListView.ItemTemplate>
@@ -18,7 +18,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Label Text="{Binding Name}" FontSize="Medium" Grid.Column="0" />
                                 <Label Text="{Binding Author}" FontSize="Medium" Grid.Column="1" />
-                                <Label Text="{Binding Text}" FontSize="Medium" Grid.Column="2" />
+                                <Label Text="{Binding File}" FontSize="Medium" Grid.Column="2" />
                             </Grid>
                         </ViewCell.View>
                     </ViewCell>

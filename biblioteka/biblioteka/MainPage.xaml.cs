@@ -1,4 +1,8 @@
-﻿using System;
+﻿using MySqlConnector;
+using System;
+using System.Data;
+using System.Xml.Linq;
+using Windows.System;
 using Xamarin.Forms;
 
 namespace biblioteka
@@ -7,27 +11,16 @@ namespace biblioteka
     {
         Label textLabel;
         Entry loginEntry, passwordEntry;
-        Picker picker;
         StackLayout stackLayout;
         Button button, button2;
         public MainPage()
         {
             stackLayout = new StackLayout();
             stackLayout.BackgroundColor = Color.White;
-            picker = new Picker
-            {
-                Title = "Роль",
-                Margin = new Thickness(10),
-                TextColor = Color.Black
-            };
-            picker.Items.Add("Клиент");
-            picker.Items.Add("Библиотекарь");
-            picker.Items.Add("Администратор");
-
-
+            
             loginEntry = new Entry
             {
-                Placeholder = "Login",
+                Placeholder = "Логин",
                 Text = "",
                 Margin = new Thickness(10),
                 TextColor = Color.Black
@@ -35,7 +28,7 @@ namespace biblioteka
 
             passwordEntry = new Entry
             {
-                Placeholder = "Password",
+                Placeholder = "Пароль",
                 Text = "",
                 IsPassword = true,
                 Margin = new Thickness(10),
@@ -76,7 +69,6 @@ namespace biblioteka
 
             button2.Clicked += OnButton2Clicked;
 
-            stackLayout.Children.Add(picker);
             stackLayout.Children.Add(loginEntry);
             stackLayout.Children.Add(passwordEntry);
             stackLayout.Children.Add(textLabel);
@@ -90,25 +82,48 @@ namespace biblioteka
         }
         private async void OnButton2Clicked(object sender, System.EventArgs e)
         {
-            if(loginEntry.Text != "" && passwordEntry.Text != "" && Convert.ToString(picker.SelectedItem) == "Клиент")
+            //await Navigation.PushModalAsync(new NavigationPage(new AdminPage(Convert.ToInt32(3))));
+            MySqlConnection conn = new MySqlConnection("server=127.0.0.1;port=3306;database=mydb;user id=root;password=1234;charset=utf8;Pooling=false;SslMode=None;");
+            string name = "";
+            try
             {
-                await Navigation.PushModalAsync(new NavigationPage(new ClientPage()));
+                if (conn.State == ConnectionState.Closed)
+                {
+                    int id = 0;
+                    string role = "";
+                    conn.Open();
+                    if (loginEntry.Text != "" && passwordEntry.Text != "")
+                    {
+                        MySqlCommand cmd1 = new MySqlCommand("select * from user where login = @login and password = @password", conn);
+                        cmd1.Parameters.AddWithValue("@login", loginEntry.Text);
+                        cmd1.Parameters.AddWithValue("@password", passwordEntry.Text);
+                        MySqlDataReader reader = cmd1.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            id = Convert.ToInt32(reader["id"]);
+                            role = Convert.ToString(reader["role"]);
+                        }
+                        reader.Close();
+                        if (role != "")
+                        {
+                            if (role == "Клиент") { await Navigation.PushModalAsync(new NavigationPage(new ClientPage(Convert.ToInt32(id)))); }
+                            if (role == "Библиотекарь") { await Navigation.PushModalAsync(new NavigationPage(new BookerPage(Convert.ToInt32(id)))); }
+                            if (role == "Администратор") { await Navigation.PushModalAsync(new NavigationPage(new AdminPage(Convert.ToInt32(id)))); }
+                        }
+                        else { await DisplayAlert("Пользователя не существует", "", "OK"); }
+                    }
+                    else
+                    {
+                        await DisplayAlert("Пустые поля", "Заполните все поля", "OK");
+                    }
+                }
+
             }
-            else if (loginEntry.Text != "" && passwordEntry.Text != "" && Convert.ToString(picker.SelectedItem) == "Библиотекарь")
+            catch (MySqlException ex)
             {
-                await Navigation.PushModalAsync(new NavigationPage(new BookerPage()));
-            }
-            else if (loginEntry.Text != "" && passwordEntry.Text != "" && Convert.ToString(picker.SelectedItem) == "Администратор")
-            {
-                await Navigation.PushModalAsync(new NavigationPage(new AdminPage()));
-            }
-            else
-            {
-                textLabel.Text = "Введите все данные";
+                await DisplayAlert("Сообщение об ошибке", ex.ToString(), "OK");
             }
         }
-
-
 
     }
 }

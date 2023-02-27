@@ -7,11 +7,25 @@ namespace biblioteka
 {
     public class User : INotifyPropertyChanged
     {
+        public int id;
         private string name;
         private string date;
         private string role;
         private string login;
         private string password;
+
+        public int Id
+        {
+            get { return id; }
+            set
+            {
+                if (id != value)
+                {
+                    id = value;
+                    OnPropertyChanged("Id");
+                }
+            }
+        }
         public string Name
         {
             get { return name; }
